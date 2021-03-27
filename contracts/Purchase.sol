@@ -1,7 +1,6 @@
 pragma solidity ^0.5.1;
 
 contract Purchase {
-
     uint public yourFunds;
 
     constructor() public {
