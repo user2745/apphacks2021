@@ -45,18 +45,35 @@ class _RandomWordsState extends State<RandomWords> {
         });
   }
 
-  void _pushedSaved() {
+  void _pushSaved() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) {
-        final tiles = _saved.map(
-          (WordPair pair) {
-            return ListTile(
-              title: Text(pair.asPascalCase, style: _biggerFont),
-            )
-          }
-        )
-      })
-    )
+      MaterialPageRoute<void>(
+        // NEW lines from here...
+        builder: (BuildContext context) {
+          final tiles = _saved.map(
+            (WordPair pair) {
+              return ListTile(
+                title: Text(
+                  pair.asPascalCase,
+                  style: _biggerFont,
+                ),
+              );
+            },
+          );
+          final divided = ListTile.divideTiles(
+            context: context,
+            tiles: tiles,
+          ).toList();
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Saved Suggestions'),
+            ),
+            body: ListView(children: divided),
+          );
+        }, // ...to here.
+      ),
+    );
   }
 
   // Private method
@@ -82,11 +99,11 @@ class _RandomWordsState extends State<RandomWords> {
 
   // This is akin to the react build section
   Widget build(BuildContext context) {
-    return Scaffold (
+    return Scaffold(
       appBar: AppBar(
-        title: Text('List of My Stuff'),
+        title: Text('List of my Stuff'),
         actions: [
-          IconButton(icon: Icon(Icons.account_balance_wallet_rounded), onPressed: _pushedSaved),
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
       ),
       body: _buildSuggestions(),
