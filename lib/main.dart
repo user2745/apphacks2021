@@ -26,6 +26,7 @@ class _RandomWordsState extends State<RandomWords> {
   // private fields
   final _suggestions = <WordPair>[];
   final _biggerFont = TextStyle(fontSize: 18.0);
+  final _saved = <WordPair>{};
 
   // Private method
   Widget _buildSuggestions() {
@@ -44,21 +45,49 @@ class _RandomWordsState extends State<RandomWords> {
         });
   }
 
+  void _pushedSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (BuildContext context) {
+        final tiles = _saved.map(
+          (WordPair pair) {
+            return ListTile(
+              title: Text(pair.asPascalCase, style: _biggerFont),
+            )
+          }
+        )
+      })
+    )
+  }
+
   // Private method
   Widget _buildRow(WordPair pair) {
+    final alreadySaved =
+        _saved.contains(pair); // double check that it hasn't been added to favs
     return ListTile(
       title: Text(
         pair.asPascalCase,
         style: _biggerFont,
       ),
+      trailing: Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.purple.shade200 : null,
+      ),
+      onTap: () {
+        setState(() {
+          alreadySaved ? _saved.remove(pair) : _saved.add(pair);
+        });
+      },
     );
   }
 
   // This is akin to the react build section
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold (
       appBar: AppBar(
         title: Text('List of My Stuff'),
+        actions: [
+          IconButton(icon: Icon(Icons.account_balance_wallet_rounded), onPressed: _pushedSaved),
+        ],
       ),
       body: _buildSuggestions(),
     );
