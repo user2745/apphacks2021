@@ -4,18 +4,12 @@ contract Purchase {
     uint public yourFunds;
 
     constructor() public {
-        yourFunds = 0;
+        yourFunds = 100;
     }
     
-    function addFunds (string memory _add) public {
-        yourFunds + _add;
-    }
+    function addFunds (uint _add) public { yourFunds + _add; }
 
-    function makePurchase (string memory _sale) public {
-        yourfunds - _sale;
-    }
+    function makePurchase (uint _sale) public { yourFunds - _sale; }
 
-    function getBalance () public {
-        return yourFunds;
-    }
+    function getBalance () public returns(uint) { return yourFunds; }
 }
